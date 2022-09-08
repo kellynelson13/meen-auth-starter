@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const userController = require('./controllers/users');
 const session = require('express-session');
 const sessionsController = require('./controllers/sessions');
+const methodOverride = require("method-override");
 
 // Database Configuration
 mongoose.connect(process.env.DATABASE_URL, {
@@ -29,9 +30,22 @@ app.use(
         resave: false,
         saveUninitialized: false
     }));
+app.use(methodOverride('_method'));
 app.use('/users', userController);
 app.use('/sessions', sessionsController);
 
+
+app.get('/', (req, res) => {
+	if (req.session.currentUser) {
+		res.render('dashboard.ejs', {
+			currentUser: req.session.currentUser
+		});
+	} else {
+		res.render('index.ejs', {
+			currentUser: req.session.currentUser
+		});
+	}
+});
 
 // Listener
 const PORT = process.env.PORT;
