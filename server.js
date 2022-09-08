@@ -5,6 +5,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const userController = require('./controllers/users');
 const session = require('express-session');
+const sessionsController = require('./controllers/sessions');
 
 // Database Configuration
 mongoose.connect(process.env.DATABASE_URL, {
@@ -29,6 +30,7 @@ app.use(
         saveUninitialized: false
     }));
 app.use('/users', userController);
+app.use('/sessions', sessionsController);
 
 
 // Listener
